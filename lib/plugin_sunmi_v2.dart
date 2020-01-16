@@ -15,6 +15,11 @@ class PluginSunmiV2 {
     return ;
   }
 
+  static Future<void> unBind() async {
+    await _channel.invokeMethod('unBind');
+    return ;
+  }
+
   static Future<void> initPrinter() async {
     await _channel.invokeMethod('initPrinter');
     return ;

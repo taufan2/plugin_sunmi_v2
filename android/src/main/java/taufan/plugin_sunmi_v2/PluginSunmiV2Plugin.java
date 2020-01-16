@@ -47,7 +47,7 @@ public class PluginSunmiV2Plugin implements FlutterPlugin, MethodCallHandler {
             result.success(null);
         }
 
-        else if (call.method.equals("unbind")) {
+        else if (call.method.equals("unBind")) {
             this.sunmiCore.unBind();
             result.success(null);
         }
