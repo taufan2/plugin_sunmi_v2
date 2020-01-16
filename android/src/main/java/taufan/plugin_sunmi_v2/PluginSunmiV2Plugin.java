@@ -1,7 +1,5 @@
 package taufan.plugin_sunmi_v2;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -18,12 +16,12 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
  */
 public class PluginSunmiV2Plugin implements FlutterPlugin, MethodCallHandler {
 
-    private SunmiBase sunmiBase;
+    private SunmiCore sunmiCore;
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         final MethodChannel channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "plugin_sunmi_v2");
-        this.sunmiBase = new SunmiBase(flutterPluginBinding.getApplicationContext());
+        this.sunmiCore = new SunmiCore(flutterPluginBinding.getApplicationContext());
         channel.setMethodCallHandler(this);
     }
 
@@ -45,28 +43,28 @@ public class PluginSunmiV2Plugin implements FlutterPlugin, MethodCallHandler {
         }
 
         else if (call.method.equals("bind")) {
-            this.sunmiBase.bind();
+            this.sunmiCore.bind();
             result.success(null);
         }
 
         else if (call.method.equals("unbind")) {
-            this.sunmiBase.unBind();
+            this.sunmiCore.unBind();
             result.success(null);
         }
 
         else if (call.method.equals("initPrinter")) {
-            this.sunmiBase.initPrinter();
+            this.sunmiCore.initPrinter();
             result.success(null);
         }
 
         else if (call.method.equals("selfCheck")) {
-            this.sunmiBase.selfCheck();
+            this.sunmiCore.selfCheck();
             result.success(null);
         }
 
         else if (call.method.equals("printText")) {
             String text = call.argument("text");
-            this.sunmiBase.printText(text);
+            this.sunmiCore.printText(text);
             result.success(null);
         }
 
@@ -75,52 +73,52 @@ public class PluginSunmiV2Plugin implements FlutterPlugin, MethodCallHandler {
             ArrayList<Integer> columnWidth = call.argument("width");
             ArrayList<Integer> alignment = call.argument("alignment");
 
-            this.sunmiBase.printColumn(Utilities.arrayListToString(stringList), Utilities.arrayListToIntList(columnWidth), Utilities.arrayListToIntList(alignment));
+            this.sunmiCore.printColumn(Utilities.arrayListToString(stringList), Utilities.arrayListToIntList(columnWidth), Utilities.arrayListToIntList(alignment));
             result.success(null);
         }
 
         else if (call.method.equals("setAlignment")) {
             Integer alignment = call.argument("alignment");
-            this.sunmiBase.setAlignment(alignment);
+            this.sunmiCore.setAlignment(alignment);
             result.success(null);
         }
 
         else if (call.method.equals("setFontSize")) {
             Double fontSize = call.argument("fontSize");
-            this.sunmiBase.setFontSize(fontSize);
+            this.sunmiCore.setFontSize(fontSize);
             result.success(null);
         }
 
         else if (call.method.equals("setBoldFont")){
-            this.sunmiBase.setFontBold();
+            this.sunmiCore.setFontBold();
             result.success(null);
         }
 
         else if (call.method.equals("setUnBoldFont")){
-            this.sunmiBase.setFontUnBold();
+            this.sunmiCore.setFontUnBold();
             result.success(null);
         }
 
         else if(call.method.equals("lineFeed")) {
-            this.sunmiBase.lineFeed();
+            this.sunmiCore.lineFeed();
             result.success(null);
         }
 
         else if(call.method.equals("setFontType")) {
             String fontType = call.argument("fontType");
-            this.sunmiBase.setFontType(fontType);
+            this.sunmiCore.setFontType(fontType);
             result.success(null);
         }
 
         else if(call.method.equals("setEmphasized")) {
             Boolean fontType = call.argument("emphasized");
-            this.sunmiBase.setEmphasized(fontType);
+            this.sunmiCore.setEmphasized(fontType);
             result.success(null);
         }
 
         else if (call.method.equals("printImage")) {
             String pathName = call.argument("pathName");
-            this.sunmiBase.printImage(pathName);
+            this.sunmiCore.printImage(pathName);
             result.success(null);
         }
 
