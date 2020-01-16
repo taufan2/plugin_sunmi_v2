@@ -33,7 +33,11 @@ public class PluginSunmiV2Plugin implements FlutterPlugin, MethodCallHandler {
      */
     public static void registerWith(Registrar registrar) {
         final MethodChannel channel = new MethodChannel(registrar.messenger(), "plugin_sunmi_v2");
-        channel.setMethodCallHandler(new PluginSunmiV2Plugin());
+
+        PluginSunmiV2Plugin pluginSunmiV2Plugin = new PluginSunmiV2Plugin();
+        pluginSunmiV2Plugin.sunmiCore = new SunmiCore(registrar.context());
+
+        channel.setMethodCallHandler(pluginSunmiV2Plugin);
     }
 
     @Override

@@ -10,9 +10,9 @@ class PluginSunmiV2 {
     return version;
   }
 
-  static Future<void> bind() async {
+  static Future<String> bind() async {
     await _channel.invokeMethod('bind');
-    return ;
+    return "test";
   }
 
   static Future<void> unBind() async {
