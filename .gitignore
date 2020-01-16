@@ -1,0 +1,13 @@
+.DS_Store
+.dart_tool/
+
+.packages
+.pub/
+
+build/
+
+.idea/
+
+plugin_sunmi_v2.iml
+
+pubspec.lock
