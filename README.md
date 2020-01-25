@@ -29,7 +29,7 @@ import 'package:plugin_sunmi_v2/plugin_sunmi_v2.dart';
  try {    
   await _printer.start(); // ini harus dilakukan sebelum memasukan method lainnya
   await _printer.printText("Lorem ipsum dolor sit amet.");
-  await _printer.commit();   ini harus dilakukan untuk melakukan print
+  await _printer.commit(); //  ini harus dilakukan untuk melakukan print
  } catch (e) {
   await _printer.cancel();
  }  
