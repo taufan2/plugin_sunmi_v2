@@ -16,12 +16,12 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
  */
 public class PluginSunmiV2Plugin implements FlutterPlugin, MethodCallHandler {
 
-    private SunmiCore sunmiCore;
+    private TransactionPrint transactionPrint;
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         final MethodChannel channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "plugin_sunmi_v2");
-        this.sunmiCore = new SunmiCore(flutterPluginBinding.getApplicationContext());
+        this.transactionPrint = new TransactionPrint(flutterPluginBinding.getApplicationContext());
         channel.setMethodCallHandler(this);
     }
 
@@ -35,99 +35,125 @@ public class PluginSunmiV2Plugin implements FlutterPlugin, MethodCallHandler {
         final MethodChannel channel = new MethodChannel(registrar.messenger(), "plugin_sunmi_v2");
 
         PluginSunmiV2Plugin pluginSunmiV2Plugin = new PluginSunmiV2Plugin();
-        pluginSunmiV2Plugin.sunmiCore = new SunmiCore(registrar.context());
+        pluginSunmiV2Plugin.transactionPrint = new TransactionPrint(registrar.context());
 
         channel.setMethodCallHandler(pluginSunmiV2Plugin);
     }
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
-        if (call.method.equals("getPlatformVersion")) {
-            result.success("Android " + android.os.Build.VERSION.RELEASE);
-        }
+        switch (call.method) {
 
-        else if (call.method.equals("bind")) {
-            this.sunmiCore.bind();
-            result.success(null);
-        }
+            case "BIND_SERVICE":
+                this.transactionPrint.bindService();
+                result.success(true);
 
-        else if (call.method.equals("unBind")) {
-            this.sunmiCore.unBind();
-            result.success(null);
-        }
+                break;
 
-        else if (call.method.equals("initPrinter")) {
-            this.sunmiCore.initPrinter();
-            result.success(null);
-        }
+            case "UNBIND_SERVICE":
+                this.transactionPrint.unbindService();
+                result.success(true);
 
-        else if (call.method.equals("selfCheck")) {
-            this.sunmiCore.selfCheck();
-            result.success(null);
-        }
+                break;
 
-        else if (call.method.equals("printText")) {
-            String text = call.argument("text");
-            this.sunmiCore.printText(text);
-            result.success(null);
-        }
+            case "PRINT_TEXT":
+                String text = call.argument("text");
 
-        else if (call.method.equals("printColumn")) {
-            ArrayList<String> stringList = call.argument("texts");
-            ArrayList<Integer> columnWidth = call.argument("width");
-            ArrayList<Integer> alignment = call.argument("alignment");
+                this.transactionPrint.printText(text);
+                result.success(true);
 
-            this.sunmiCore.printColumn(Utilities.arrayListToString(stringList), Utilities.arrayListToIntList(columnWidth), Utilities.arrayListToIntList(alignment));
-            result.success(null);
-        }
+                break;
 
-        else if (call.method.equals("setAlignment")) {
-            Integer alignment = call.argument("alignment");
-            this.sunmiCore.setAlignment(alignment);
-            result.success(null);
-        }
+            case "SET_ALIGNMENT":
+                Integer alignment = call.argument("alignment");
 
-        else if (call.method.equals("setFontSize")) {
-            Double fontSize = call.argument("fontSize");
-            this.sunmiCore.setFontSize(fontSize);
-            result.success(null);
-        }
+                this.transactionPrint.setAlignment(alignment);
+                result.success(true);
 
-        else if (call.method.equals("setBoldFont")){
-            this.sunmiCore.setFontBold();
-            result.success(null);
-        }
+                break;
 
-        else if (call.method.equals("setUnBoldFont")){
-            this.sunmiCore.setFontUnBold();
-            result.success(null);
-        }
+            case "SET_FONT_SIZE":
+                Double font_size = call.argument("font_size");
 
-        else if(call.method.equals("lineFeed")) {
-            this.sunmiCore.lineFeed();
-            result.success(null);
-        }
+                this.transactionPrint.setFontSize(font_size);
+                result.success(true);
 
-        else if(call.method.equals("setFontType")) {
-            String fontType = call.argument("fontType");
-            this.sunmiCore.setFontType(fontType);
-            result.success(null);
-        }
+                break;
 
-        else if(call.method.equals("setEmphasized")) {
-            Boolean fontType = call.argument("emphasized");
-            this.sunmiCore.setEmphasized(fontType);
-            result.success(null);
-        }
+            case "SET_FONT_BOLD":
+                Boolean font_bold = call.argument("font_bold");
 
-        else if (call.method.equals("printImage")) {
-            String pathName = call.argument("pathName");
-            this.sunmiCore.printImage(pathName);
-            result.success(null);
-        }
+                this.transactionPrint.setFontBold(font_bold);
+                result.success(true);
 
-        else {
-            result.notImplemented();
+                break;
+
+            case "PRINT_COLUMN":
+                ArrayList<String> string_column = call.argument("text_column");
+                int[] column_width = call.argument("column_width");
+                int[] column_alignment = call.argument("column_alignment");
+
+                String[] strings = Utilities.arrayListToString(string_column);
+
+                this.transactionPrint.printColumn(strings, column_width, column_alignment);
+
+                result.success(true);
+
+                break;
+
+            case "LINE_FEED":
+                Integer lines = call.argument("lines");
+
+                this.transactionPrint.lineFeed(lines);
+                result.success(true);
+
+                break;
+
+            case "SET_FONT_TYPE":
+                String font_type = call.argument("font_type");
+
+                this.transactionPrint.setFontType(font_type);
+                result.success(true);
+
+                break;
+
+            case "SET_FONT_EMPHASIZED":
+                Boolean font_emphasized = call.argument("font_emphasized");
+
+                this.transactionPrint.setEmphasized(font_emphasized);
+                result.success(true);
+
+                break;
+
+            case "PRINT_IMAGE":
+                String image_path = call.argument("path");
+
+                this.transactionPrint.printImage(image_path);
+                result.success(true);
+
+                break;
+
+            case "COMMIT_PRINT":
+                this.transactionPrint.commit();
+                result.success(true);
+
+                break;
+
+            case "START":
+                this.transactionPrint.start();
+                result.success(true);
+
+                break;
+
+            case "CANCEL":
+                this.transactionPrint.cancel();
+                result.success(true);
+
+                break;
+
+            default:
+                result.notImplemented();
+                break;
         }
     }
 

@@ -1,7 +1,7 @@
 name: plugin_sunmi_v2
-description: A new Flutter plugin.
-version: 0.0.1
-author: taufan
+description: Plugin Flutter untuk Mobile Printer Sunmi V2.
+version: 1.0.0
+author: Taufan Budi Prayogo
 homepage:
 
 environment:

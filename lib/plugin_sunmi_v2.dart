@@ -1,90 +1,106 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 
 class PluginSunmiV2 {
-  static const MethodChannel _channel = const MethodChannel('plugin_sunmi_v2');
+  static const int ALIGNMENT_LEFT = 0;
+  static const int ALIGNMENT_CENTER = 1;
+  static const int ALIGNMENT_RIGHT = 2;
 
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
-  }
+  static const String FONT_TYPE_A = "A";
+  static const String FONT_TYPE_B = "B";
+  static const String FONT_TYPE_C = "C";
 
-  static Future<String> bind() async {
-    await _channel.invokeMethod('bind');
-    return "test";
-  }
+  final MethodChannel _channel = const MethodChannel('plugin_sunmi_v2');
 
-  static Future<void> unBind() async {
-    await _channel.invokeMethod('unBind');
-    return ;
-  }
-
-  static Future<void> initPrinter() async {
-    await _channel.invokeMethod('initPrinter');
-    return ;
-  }
-
-  static Future<void> selfCheck() async {
-    await _channel.invokeMethod("selfCheck");
-    return ;
-  }
-
-  static Future<void> lineFeed() async{
-    await _channel.invokeMethod("lineFeed");
-    return ;
-  }
-
-  static Future<void> printText(String text) async {
-    await _channel.invokeMethod("printText", <String, dynamic>{"text": text});
+  Future<void> bind() async {
+    await _channel.invokeMethod('BIND_SERVICE');
     return;
   }
 
-  static Future<void> printImage(String pathName) async {
-    await _channel.invokeMethod("printImage", {'pathName': pathName});
+  Future<void> unBind() async {
+    await _channel.invokeMethod('UNBIND_SERVICE');
     return;
   }
 
-  static Future<void> printColumn(List<String> texts, {List<int> width = const[1, 2], List<int> alignment = const[0, 2]}) async {
-    await _channel.invokeMethod("printColumn", {
-      'texts' : texts,
-      'width': width,
-      'alignment': alignment
-    });
-    return ;
-  }
+  Future<void> lineFeed({int lines = 1}) async {
+    Map<String, dynamic> arguments = <String, dynamic>{"lines": lines};
 
-  static Future<void> setAlignment({int position: 0}) async{
-    await _channel.invokeMethod("setAlignment", <String, dynamic>{'alignment': position});
-    return ;
-  }
-
-  static Future<void> setFontSize(double fontSize) async{
-    await _channel.invokeMethod("setFontSize", {'fontSize' : fontSize});
+    await _channel.invokeMethod("LINE_FEED", arguments);
     return;
   }
 
-  static Future<void> setBoldFont() async{
-    await _channel.invokeMethod("setBoldFont");
+  Future<void> printText(String text) async {
+    Map<String, dynamic> arguments = <String, dynamic>{"text": text};
+
+    await _channel.invokeMethod("PRINT_TEXT", arguments);
     return;
   }
 
-  static Future<void> setUnBoldFont() async{
-    await _channel.invokeMethod("setUnBoldFont");
+  Future<void> printImage(String path) async {
+    Map<String, dynamic> arguments = <String, dynamic>{"path": path};
+
+    await _channel.invokeMethod("PRINT_IMAGE", arguments);
     return;
   }
 
-  static Future<void> setFontType({String fontType: "A"}) async {
-    await _channel.invokeMethod("setFontType", {
-      'fontType': fontType
-    });
-  }
+  Future<void> printColumn(List<String> text, {Int32List columnWidth, Int32List columnAlignment}) async {
+    columnWidth = columnWidth ?? Int32List.fromList([1, 2]);
+    columnAlignment = columnAlignment ?? Int32List.fromList([0, 2]);
+    Map<String, dynamic> arguments = <String, dynamic>{'text_column': text, 'column_width': columnWidth, 'column_alignment': columnAlignment};
 
-  static Future<void> setEmphasized({bool emphasized: false}) async {
-    await _channel.invokeMethod("setEmphasized", {
-      'emphasized': emphasized
-    });
+    await _channel.invokeMethod("PRINT_COLUMN", arguments);
     return;
   }
 
+  Future<void> setAlignment({int position: ALIGNMENT_LEFT}) async {
+    Map<String, dynamic> arguments = <String, dynamic>{'alignment': position};
+
+    await _channel.invokeMethod("SET_ALIGNMENT", arguments);
+    return;
+  }
+
+  Future<void> setFontSize({double fontSize = 14}) async {
+    Map<String, dynamic> arguments = <String, dynamic>{'font_size': fontSize};
+
+    await _channel.invokeMethod("SET_FONT_SIZE", arguments);
+    return;
+  }
+
+  Future<void> setBoldFont({bool bold = true}) async {
+    Map<String, dynamic> arguments = <String, dynamic>{'font_bold': bold};
+
+    await _channel.invokeMethod("SET_FONT_BOLD", arguments);
+    return;
+  }
+
+  Future<void> setFontType({String fontType: FONT_TYPE_A}) async {
+    Map<String, dynamic> arguments = <String, dynamic>{'font_type': fontType};
+
+    await _channel.invokeMethod("SET_FONT_TYPE", arguments);
+    return;
+  }
+
+  Future<void> setEmphasized({bool emphasized: false}) async {
+    Map<String, dynamic> arguments = <String, dynamic>{'font_emphasized': emphasized};
+
+    await _channel.invokeMethod("SET_FONT_EMPHASIZED", arguments);
+    return;
+  }
+
+  Future<void> commit() async {
+    await _channel.invokeMethod("COMMIT_PRINT");
+    return;
+  }
+
+  Future<void> start() async {
+    await _channel.invokeMethod("START");
+    return;
+  }
+
+  Future<void> cancel() async {
+    await _channel.invokeMethod("CANCEL");
+    return;
+  }
 }

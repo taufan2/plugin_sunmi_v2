@@ -1,7 +1,5 @@
 package taufan.plugin_sunmi_v2;
 
-import android.util.Log;
-
 public class EscPosCommand {
     final static private byte LF = 10;
     final static private byte ESC = 27;
@@ -13,8 +11,12 @@ public class EscPosCommand {
     final static private byte M = 77;
     final static private byte a = 97;
 
-    public static byte[] lineFeed() {
-        return new byte[]{LF};
+    public static byte[] lineFeed(Integer count) {
+        byte[] command = new byte[count];
+        for (int i = 0; i < count; i++) {
+            command[i] = LF;
+        }
+        return command;
     }
 
     public static byte[] setFont(String fontType) {
