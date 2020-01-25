@@ -1,7 +1,7 @@
 
 # Plugin Sunmi V2  
   
-Ini ada plugin untuk Mobile Printer Sunmi V2, plugin ini masih dalam tahap pengembangan.  
+Ini adalah plugin untuk Mobile Printer Sunmi V2, plugin ini masih dalam tahap pengembangan.  
   
 ## Perangkat yang sudah dicoba  
   
