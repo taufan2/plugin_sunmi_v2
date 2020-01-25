@@ -6,6 +6,18 @@ Ini adalah plugin untuk Mobile Printer Sunmi V2, plugin ini masih dalam tahap pe
 ## Perangkat yang sudah dicoba  
   
  - [x] Sunmi V2  
+ 
+## Instalasi
+Tambahkan ini fi file pubspec.yaml
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+    
+  plugin_sunmi_v2:
+    git: git://github.com/taufan2/flutter-sunmi.git
+```
   
 ## Penggunaan  
   
