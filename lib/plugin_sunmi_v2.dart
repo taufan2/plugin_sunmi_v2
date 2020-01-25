@@ -89,6 +89,13 @@ class PluginSunmiV2 {
     return;
   }
 
+  Future<void> sendRaw(Uint8List bytes) async {
+    Map<String, dynamic> arguments = <String, dynamic>{'bytes': bytes};
+
+    await _channel.invokeMethod("SEND_RAW", arguments);
+    return;
+  }
+
   Future<void> commit() async {
     await _channel.invokeMethod("COMMIT_PRINT");
     return;

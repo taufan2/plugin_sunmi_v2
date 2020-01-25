@@ -133,6 +133,13 @@ public class PluginSunmiV2Plugin implements FlutterPlugin, MethodCallHandler {
 
                 break;
 
+            case "SEND_RAW":
+                byte[] bytes = call.argument("bytes");
+                this.transactionPrint.sendRaw(bytes);
+                result.success(true);
+
+                break;
+
             case "COMMIT_PRINT":
                 this.transactionPrint.commit();
                 result.success(true);

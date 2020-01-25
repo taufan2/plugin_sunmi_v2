@@ -162,6 +162,14 @@ public class TransactionPrint {
         }
     }
 
+    public void sendRaw(byte[] bytes) {
+        try {
+            this.woyouService.sendRAWData(bytes, this._callback());
+        } catch (RemoteException e) {
+
+        }
+    }
+
     public void commit() {
         try {
             this.woyouService.lineWrap(5, null);
